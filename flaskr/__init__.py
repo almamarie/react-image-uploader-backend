@@ -1,12 +1,18 @@
 from flask import Flask, request, abort, jsonify
-from models import setup_db
+from models import setup_db, db, FilesData
 from flask_cors import CORS
+from models import FilesData
+import sys
+from flask_moment import Moment
+from flask_migrate import Migrate
 
 
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app, resources={r"/api/": {"origins": "http://localhost:3000"}})
+    moment = Moment(app)
+    migrate = Migrate(app, db)
 
     @app.after_request
     def after_request(response):
@@ -31,5 +37,57 @@ def create_app(test_config=None):
     @app.route("/")
     def main_route():
         return jsonify({"success": True, "message": "Configuration Successful"})
+
+    @app.route("/upload", methods=["POST"])
+    def upload_photo():
+        try:
+
+            file = request.files.get("file")
+
+            print(file)
+
+            file_data = FilesData.create_new_file(file)
+            return jsonify({
+                "success": True
+            })
+        except:
+            print(sys.exc_info())
+            abort(400)
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return (
+            jsonify({"success": False, "error": 404,
+                    "message": "resource not found"}),
+            404,
+        )
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return (
+            jsonify({"success": False, "error": 422,
+                    "message": "unprocessable"}),
+            422,
+        )
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({"success": False, "error": 400, "message": "bad request"}), 400
+
+    @app.errorhandler(405)
+    def not_found(error):
+        return (
+            jsonify({"success": False, "error": 405,
+                    "message": "method not allowed"}),
+            405,
+        )
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return (
+            jsonify({"success": False, "error": 500,
+                    "message": "server error"}),
+            500,
+        )
 
     return app
