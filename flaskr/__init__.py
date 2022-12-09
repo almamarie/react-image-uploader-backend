@@ -5,6 +5,7 @@ from models import FilesData
 import sys
 from flask_moment import Moment
 from flask_migrate import Migrate
+import json
 
 
 def create_app(test_config=None):
@@ -41,15 +42,27 @@ def create_app(test_config=None):
     @app.route("/upload", methods=["POST"])
     def upload_photo():
         try:
-
+            print("Received request to add new file data")
             file = request.files.get("file")
 
-            print(file)
+            print("Request file: ", file)
 
+            print("creating new FilesData model...")
             file_data = FilesData.create_new_file(file)
-            return jsonify({
-                "success": True
-            })
+            print("done.")
+
+            # Insert file data into database
+            print("Inserting data into database...")
+            new_dile_data = file_data.insert()
+            print("done inserting data into database")
+
+            # return success and new file data
+            return_data = {
+                "success": True,
+                "fileData": new_dile_data
+            }
+            print("Returning: ", json.dumps(return_data))
+            return jsonify(return_data)
         except:
             print(sys.exc_info())
             abort(400)
