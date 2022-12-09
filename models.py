@@ -22,6 +22,7 @@ class FilesData(db.Model):
 
     file_name = db.Column(db.String(), primary_key=True, nullable=False)
     public_id = db.Column(db.String(), nullable=False)
+    file_url = db.Column(db.String(), nullable=False)
     upload_date = db.Column(db.String(), nullable=False)
 
     def __init__(self, data):
@@ -29,6 +30,7 @@ class FilesData(db.Model):
         try:
             self.file_name = data.get("name")
             self.public_id = data.get("publicId")
+            self.url = data.get("url")
             self.upload_date = data.get("uploadDate")
         except:
             raise Exception("Missing fields")
@@ -38,9 +40,10 @@ class FilesData(db.Model):
     def create_new_file(cls, file):
         print("checking if file exists in data...")
         file_in_database = FilesData.query.filter(
-            FilesData.file_name == file.name).one_or_none()
+            FilesData.file_name == file.filename).one_or_none()
 
         if file_in_database:
+            print("file exists in database")
             raise Exception("File already exists in database")
 
         print("done: file does not exist in database.")
@@ -81,6 +84,7 @@ class FilesData(db.Model):
         return {
             "fileName": self.file_name,
             "publicId": self.public_id,
+            "url": self.url,
             "uploadDate": self.upload_date
         }
 

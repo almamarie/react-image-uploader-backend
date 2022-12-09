@@ -7,6 +7,9 @@ from flask_moment import Moment
 from flask_migrate import Migrate
 import json
 
+# to be removed
+import time
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -41,6 +44,8 @@ def create_app(test_config=None):
 
     @app.route("/upload", methods=["POST"])
     def upload_photo():
+        # time.sleep(10)
+        # abort(400)
         try:
             print("Received request to add new file data")
             file = request.files.get("file")
