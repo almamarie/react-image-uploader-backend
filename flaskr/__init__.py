@@ -44,8 +44,14 @@ def create_app(test_config=None):
 
     @app.route("/upload", methods=["POST"])
     def upload_photo():
-        # time.sleep(10)
-        # abort(400)
+        # return jsonify({
+        #     "success": True,
+        #     "fileData": {
+        #         "fileName": "download.jpeg",
+        #         "publicId": "pkcaqp8zemrpws5fggzw",
+        #         "fileUrl": "http://res.cloudinary.com/marieloumar/image/upload/v1670589285/pkcaqp8zemrpws5fggzw.jpg",
+        #         "uploadDate": "09/12/2022 12:34:46"}
+        # })
         try:
             print("Received request to add new file data")
             file = request.files.get("file")
@@ -58,16 +64,16 @@ def create_app(test_config=None):
 
             # Insert file data into database
             print("Inserting data into database...")
-            new_dile_data = file_data.insert()
+            new_file_data = file_data.insert()
             print("done inserting data into database")
 
             # return success and new file data
             return_data = {
                 "success": True,
-                "fileData": new_dile_data
+                "fileData": new_file_data
             }
             print("Returning: ", json.dumps(return_data))
-            return jsonify(return_data)
+            return jsonify({"success": True, "fileData": return_data})
         except:
             print(sys.exc_info())
             abort(400)

@@ -30,7 +30,7 @@ class FilesData(db.Model):
         try:
             self.file_name = data.get("name")
             self.public_id = data.get("publicId")
-            self.url = data.get("url")
+            self.file_url = data.get("url")
             self.upload_date = data.get("uploadDate")
         except:
             raise Exception("Missing fields")
@@ -56,6 +56,7 @@ class FilesData(db.Model):
         data = {
             "name": file.filename,
             "publicId": upload_data.get("public_id"),
+            'url': upload_data.get('url'),
             "uploadDate": datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         }
         print("creating object...")
@@ -84,7 +85,7 @@ class FilesData(db.Model):
         return {
             "fileName": self.file_name,
             "publicId": self.public_id,
-            "url": self.url,
+            "fileUrl": self.file_url,
             "uploadDate": self.upload_date
         }
 
