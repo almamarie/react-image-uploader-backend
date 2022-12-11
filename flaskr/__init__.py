@@ -15,7 +15,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app, resources={
-         r"/api/": {"origins": "http://localhost:3000, https://dev-challenge-image-uploader.web.app"}})
+         r"/api/": {"origins": "https://dev-challenge-image-uploader.web.app"}})
     moment = Moment(app)
     migrate = Migrate(app, db)
 
@@ -30,7 +30,7 @@ def create_app(test_config=None):
         )
 
         response.headers.add(
-            'Access-Control-Allow-Origin', 'http://localhost:3000, "https://dev-challenge-image-uploader.web.app'
+            'Access-Control-Allow-Origin', 'https://dev-challenge-image-uploader.web.app'
         )
 
         response.headers.add(
