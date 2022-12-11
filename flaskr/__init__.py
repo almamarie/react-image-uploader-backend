@@ -15,7 +15,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app, resources={
-         r"/api/": {"origins": "http://localhost:3000, https://dev-challenge-image-uploader.web.app/"}})
+         r"/api/": {"origins": "http://localhost:3000, https://dev-challenge-image-uploader.web.app"}})
     moment = Moment(app)
     migrate = Migrate(app, db)
 
