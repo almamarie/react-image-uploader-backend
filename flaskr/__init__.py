@@ -30,7 +30,7 @@ def create_app(test_config=None):
         )
 
         response.headers.add(
-            'Access-Control-Allow-Origin', 'http://localhost:3000, "https://dev-challenge-image-uploader.web.app/'
+            'Access-Control-Allow-Origin', 'http://localhost:3000, "https://dev-challenge-image-uploader.web.app'
         )
 
         response.headers.add(
